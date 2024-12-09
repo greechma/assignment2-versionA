@@ -63,11 +63,22 @@ def get_avail_mem() -> int:
 def pids_of_prog(app_name: str) -> list:
     "given an app name, return all pids associated with app"
     ...
+    pids = os.popen(f'pidof {app_name}').read().strip().split()
+    return pids if pids else []
 
 def rss_mem_of_pid(proc_id: str) -> int:
     "given a process id, return the resident memory used, zero if not found"
     ...
-
+    rss_mem = 0
+    try:
+        with open(f'/proc/{proc_id}/smaps', 'r') as f:
+            for line in f:
+                if 'Rss:' in line:
+                    rss_mem += int(line.split()[1])
+    except FileNotFoundError:
+        pass
+    return rss_mem
+# Milestone2-completed
 def bytes_to_human_r(kibibytes: int, decimal_places: int=2) -> str:
     "turn 1,024 into 1 MiB, for example"
     suffixes = ['KiB', 'MiB', 'GiB', 'TiB', 'PiB']  # iB indicates 1024
