@@ -95,8 +95,29 @@ if __name__ == "__main__":
     args = parse_command_args()
     if not args.program:
         ...
+        total_mem = get_sys_mem()
+        avail_mem = get_avail_mem()
+        used_mem = total_mem - avail_mem
+        used_percent = used_mem / total_mem
+        graph = percent_to_graph(used_percent, args.length)
+        if args.human_readable:
+            total_mem = bytes_to_human_r(total_mem)
+            used_mem = bytes_to_human_r(used_mem)
+        print(f"Memory {graph} {int(used_percent * 100)}% {used_mem}/{total_mem}")
     else:
         ...
+     pids = pids_of_prog(args.program)
+        if not pids:
+            print(f"{args.program} not found.")
+            sys.exit()
+        for pid in pids:
+            rss = rss_mem_of_pid(pid)
+            rss_percent = rss / get_sys_mem()
+            graph = percent_to_graph(rss_percent, args.length)
+            if args.human_readable:
+                rss = bytes_to_human_r(rss)
+            print(f"{pid:6} {graph} {rss}")
+
     # process args
     # if no parameter passed, 
     # open meminfo.
