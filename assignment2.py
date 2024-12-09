@@ -3,18 +3,17 @@
 '''
 OPS445 Assignment 2
 Program: assignment2.py 
-Author: "Student Name"
-Semester: "Enter Winter/Summer/Fall Year"
+Author: Grishma Gairhe
+Semester: Fall 2024
 
-The python code in this file is original work written by
-"Student Name". No code in this file is copied from any other source 
+The python code in this file is original work written by Grishma Gairhe. No code in this file is copied from any other source 
 except those provided by the course instructor, including any person, 
 textbook, or on-line resource. I have not shared this python script 
 with anyone or anything except for submission for grading.  
 I understand that the Academic Honesty Policy will be enforced and 
 violators will be reported and appropriate action will be taken.
 
-Description: <Enter your documentation here>
+Description: ggairhe-162532220
 
 '''
 
@@ -38,14 +37,28 @@ def percent_to_graph(percent: float, length: int=20) -> str:
     "turns a percent 0.0 - 1.0 into a bar graph"
     ...
 # percent to graph function
+input_length = int(length * percent) #number of length of character
+    blank_length = length - input_length #num of blanks
+    return '#' * input_length + ' ' * blank_length #bar-graph string
 
 def get_sys_mem() -> int:
     "return total system memory (used or available) in kB"
     ...
+ with open('/proc/meminfo', 'r') as f:
+        for line in f:
+            if 'MemTotal' in line:
+                return int(line.split()[1]) #total memory
+    return 0
 
 def get_avail_mem() -> int:
     "return total memory that is available"
     ...
+    with open('/proc/meminfo', 'r') as f:
+        for line in f:
+            if 'MemAvailable' in line:
+                return int(line.split()[1]) #total available memory
+    return 0
+#Milestone1-completed
 
 def pids_of_prog(app_name: str) -> list:
     "given an app name, return all pids associated with app"
